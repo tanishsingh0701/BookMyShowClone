@@ -44,7 +44,8 @@ namespace BookMyShowClone.Controllers
                     Name = user.Name,
                     Email = user.Email,
                     Password = SecurePasswordHasherHelper.Hash(user.Password),
-                    Role = "Users"
+
+                    Role = (user.Role != null) ? user.Role : "Users"
 
                 };
                 _dbContext.Users.Add(userObj);

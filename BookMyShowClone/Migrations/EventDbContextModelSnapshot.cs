@@ -66,7 +66,7 @@ namespace BookMyShowClone.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("BookMyShowClone.Models.Reservation", b =>

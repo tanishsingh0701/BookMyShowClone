@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookMyShowClone.Migrations
 {
     [DbContext(typeof(EventDbContext))]
-    [Migration("20220201124716_initialcreate")]
+    [Migration("20220201160330_initialcreate")]
     partial class initialcreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,7 +68,7 @@ namespace BookMyShowClone.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Events");
                 });
 
             modelBuilder.Entity("BookMyShowClone.Models.Reservation", b =>

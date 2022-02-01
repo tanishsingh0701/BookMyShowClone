@@ -8,7 +8,7 @@ namespace BookMyShowClone.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Movies",
+                name: "Events",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -28,7 +28,7 @@ namespace BookMyShowClone.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Movies", x => x.Id);
+                    table.PrimaryKey("PK_Events", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,9 +64,9 @@ namespace BookMyShowClone.Migrations
                 {
                     table.PrimaryKey("PK_Reservations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reservations_Movies_EventId",
+                        name: "FK_Reservations_Events_EventId",
                         column: x => x.EventId,
-                        principalTable: "Movies",
+                        principalTable: "Events",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -94,7 +94,7 @@ namespace BookMyShowClone.Migrations
                 name: "Reservations");
 
             migrationBuilder.DropTable(
-                name: "Movies");
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "Users");
