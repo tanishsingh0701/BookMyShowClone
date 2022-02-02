@@ -71,9 +71,11 @@ namespace BookMyShowClone.Controllers
 
             var claims = new[]
                  {
+
                         new Claim(JwtRegisteredClaimNames.Email, user.Email),
                         new Claim(ClaimTypes.Email, user.Email),
-                        new Claim(ClaimTypes.Role, userEmail.Role)
+                        new Claim(ClaimTypes.Role, userEmail.Role),
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                      };
 
             var token = _auth.GenerateAccessToken(claims);
