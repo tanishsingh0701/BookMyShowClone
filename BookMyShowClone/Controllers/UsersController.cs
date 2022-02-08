@@ -72,10 +72,12 @@ namespace BookMyShowClone.Controllers
             var claims = new[]
                  {
 
+                        new Claim(ClaimTypes.NameIdentifier, userEmail.Id.ToString()),
                         new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                        //new Claim(JwtRegisteredClaimNames.Email, user.Email),
                         new Claim(ClaimTypes.Email, user.Email),
                         new Claim(ClaimTypes.Role, userEmail.Role),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                        
                      };
 
             var token = _auth.GenerateAccessToken(claims);
@@ -88,6 +90,7 @@ namespace BookMyShowClone.Controllers
                 creation_Time = token.ValidFrom,
                 expiration_Time = token.ValidTo,
                 user_id = userEmail.Id,
+                
             });
 
         }

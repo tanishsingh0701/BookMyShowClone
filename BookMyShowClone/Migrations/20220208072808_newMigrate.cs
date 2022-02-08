@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookMyShowClone.Migrations
 {
-    public partial class initialcreate : Migration
+    public partial class newMigrate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -55,6 +55,7 @@ namespace BookMyShowClone.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Qty = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
+                    TotalAmount = table.Column<double>(type: "float", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ReservationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: false),

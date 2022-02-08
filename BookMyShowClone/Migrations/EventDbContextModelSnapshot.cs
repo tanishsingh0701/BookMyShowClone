@@ -91,6 +91,9 @@ namespace BookMyShowClone.Migrations
                     b.Property<DateTime>("ReservationTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 

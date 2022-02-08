@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookMyShowClone.Migrations
 {
     [DbContext(typeof(EventDbContext))]
-    [Migration("20220201160330_initialcreate")]
-    partial class initialcreate
+    [Migration("20220208072808_newMigrate")]
+    partial class newMigrate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -92,6 +92,9 @@ namespace BookMyShowClone.Migrations
 
                     b.Property<DateTime>("ReservationTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
