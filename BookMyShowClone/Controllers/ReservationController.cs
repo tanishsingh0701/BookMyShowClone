@@ -30,6 +30,12 @@ namespace BookMyShowClone.Controllers
         [Authorize(Roles ="Users")]
         public IActionResult Post([FromBody] Reservation reservationObj) 
         {
+            var resev = _dbContext.Events.Where(m => m.Id == reservationObj.EventId)
+                .Select(m => m.TicketPrice)
+                .SingleOrDefault();
+
+            reservationObj.UserId = GetUserId();
+            reservationObj.Price = resev; 
             reservationObj.ReservationTime = DateTime.Now;
             reservationObj.TotalAmount = reservationObj.Price * reservationObj.Qty;
             _dbContext.Reservations.Add(reservationObj);
