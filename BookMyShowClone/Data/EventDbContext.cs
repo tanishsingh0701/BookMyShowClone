@@ -17,5 +17,6 @@ namespace BookMyShowClone.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Favourite> Favourites { get; set; }
     }
 }

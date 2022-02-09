@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookMyShowClone.Migrations
 {
-    public partial class newMigrate : Migration
+    public partial class newMIgrate2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,7 @@ namespace BookMyShowClone.Migrations
                     PlayingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PlayingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TicketPrice = table.Column<double>(type: "float", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Rating = table.Column<double>(type: "float", nullable: false),
                     Genre = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TrailorUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -45,6 +46,32 @@ namespace BookMyShowClone.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Favourites",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EventId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Favourites", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Favourites_Events_EventId",
+                        column: x => x.EventId,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Favourites_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,6 +106,16 @@ namespace BookMyShowClone.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Favourites_EventId",
+                table: "Favourites",
+                column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Favourites_UserId",
+                table: "Favourites",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Reservations_EventId",
                 table: "Reservations",
                 column: "EventId");
@@ -91,6 +128,9 @@ namespace BookMyShowClone.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Favourites");
+
             migrationBuilder.DropTable(
                 name: "Reservations");
 

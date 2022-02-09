@@ -34,6 +34,20 @@ namespace BookMyShowClone.Controllers
                 .Select(m => m.TicketPrice)
                 .SingleOrDefault();
 
+            var eventId = reservationObj.EventId;
+            var unResesrvedSeats = _dbContext.Events.Where(m => m.Id == reservationObj.EventId)
+                                    .Select(m => m.UnReservedSeats).SingleOrDefault();
+
+            if (unResesrvedSeats <= 0) 
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
+
+            var eventsObj = _dbContext.Events.Find(eventId);
+
+            eventsObj.ReservedSeats++;
+            eventsObj.UnReservedSeats--;
+
             reservationObj.UserId = GetUserId();
             reservationObj.Price = resev; 
             reservationObj.ReservationTime = DateTime.Now;

@@ -26,8 +26,15 @@ namespace BookMyShowClone.Models
         public DateTime PlayingDate { get; set; }
         public DateTime PlayingTime { get; set; }
         public double TicketPrice { get; set; }
+        public string City { get; set; }
 
-        public double Rating { get; set; }
+        public double Rating { get; set; } = 0;
+        public int RatingCount { get; set; } = 0;
+
+        [Required]
+        public int UnReservedSeats { get; set; }
+
+        public int ReservedSeats { get; set; } = 0;
         public string Genre { get; set; }
         public string TrailorUrl { get; set; }
 
@@ -38,5 +45,6 @@ namespace BookMyShowClone.Models
         public string ImageUrl { get; set; }
 
         public ICollection<Reservation> Reservations { get; set; }
+        public ICollection<Favourite> Favourites { get; set; }
     }
 }

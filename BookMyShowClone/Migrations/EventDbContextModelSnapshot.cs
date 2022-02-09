@@ -29,6 +29,9 @@ namespace BookMyShowClone.Migrations
                     b.Property<string>("Artist")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -67,6 +70,28 @@ namespace BookMyShowClone.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("BookMyShowClone.Models.Favourite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Favourites");
                 });
 
             modelBuilder.Entity("BookMyShowClone.Models.Reservation", b =>
@@ -130,6 +155,21 @@ namespace BookMyShowClone.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("BookMyShowClone.Models.Favourite", b =>
+                {
+                    b.HasOne("BookMyShowClone.Models.Event", null)
+                        .WithMany("Favourites")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookMyShowClone.Models.User", null)
+                        .WithMany("Favourites")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BookMyShowClone.Models.Reservation", b =>
                 {
                     b.HasOne("BookMyShowClone.Models.Event", null)
@@ -147,11 +187,15 @@ namespace BookMyShowClone.Migrations
 
             modelBuilder.Entity("BookMyShowClone.Models.Event", b =>
                 {
+                    b.Navigation("Favourites");
+
                     b.Navigation("Reservations");
                 });
 
             modelBuilder.Entity("BookMyShowClone.Models.User", b =>
                 {
+                    b.Navigation("Favourites");
+
                     b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618

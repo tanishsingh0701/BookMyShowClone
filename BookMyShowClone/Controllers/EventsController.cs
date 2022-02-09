@@ -115,5 +115,23 @@ namespace BookMyShowClone.Controllers
 
         }
 
+        [Authorize]
+        [HttpGet("{info}")]
+        public IActionResult FindMovies(string info)
+        {
+            var movies = from movie in _dbContext.Events
+                         where movie.City.StartsWith(info) ||
+                         movie.Name.StartsWith(info) ||
+                         movie.Artist.StartsWith(info) ||
+                         movie.Genre.StartsWith(info)
+                         select new
+                         {
+                             Id = movie.Id,
+                             Name = movie.Name,
+                             ImageUrl = movie.ImageUrl
+                         };
+            return Ok(movies);
+        }
+
     }
 }
