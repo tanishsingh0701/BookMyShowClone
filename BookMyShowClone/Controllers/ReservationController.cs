@@ -38,15 +38,16 @@ namespace BookMyShowClone.Controllers
             var unResesrvedSeats = _dbContext.Events.Where(m => m.Id == reservationObj.EventId)
                                     .Select(m => m.UnReservedSeats).SingleOrDefault();
 
-            if (unResesrvedSeats <= 0) 
+            if (unResesrvedSeats-reservationObj.Qty <0 ) 
             {
+                
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
 
             var eventsObj = _dbContext.Events.Find(eventId);
 
-            eventsObj.ReservedSeats++;
-            eventsObj.UnReservedSeats--;
+            eventsObj.ReservedSeats+=reservationObj.Qty;
+            eventsObj.UnReservedSeats-= reservationObj.Qty;
 
             reservationObj.UserId = GetUserId();
             reservationObj.Price = resev; 
@@ -140,9 +141,6 @@ namespace BookMyShowClone.Controllers
                                    playingTime = movie.PlayingTime
 
                                };
-
-
-
 
 
             //return Ok(reservations.Count);

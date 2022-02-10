@@ -1,6 +1,7 @@
 ﻿using AuthenticationPlugin;
 using BookMyShowClone.Data;
 using BookMyShowClone.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,18 +14,20 @@ using System.Threading.Tasks;
 
 namespace BookMyShowClone.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
         private readonly EventDbContext _dbContext;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AuthService _auth;
 
-        public UsersController(EventDbContext dbContext,IConfiguration configuration)
+        public UsersController(EventDbContext dbContext,IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             this._dbContext = dbContext;
             this._configuration = configuration;
+            this._httpContextAccessor = httpContextAccessor;
             _auth = new AuthService(configuration);
         }
 
@@ -53,6 +56,8 @@ namespace BookMyShowClone.Controllers
                 return StatusCode(StatusCodes.Status201Created);
             }
         }
+
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
 
         [HttpPost]
@@ -93,6 +98,70 @@ namespace BookMyShowClone.Controllers
                 
             });
 
+        }
+
+        [Authorize(Roles = "Users")]
+        [HttpPost("AddFavorite/{id}")]
+        public IActionResult AddFavorite(int id)
+        {
+
+            var favObj = new Favourite
+            {
+                EventId = id,
+                UserId = GetUserId()
+            };
+
+            _dbContext.Favourites.Add(favObj);
+            _dbContext.SaveChanges();
+
+            return StatusCode(StatusCodes.Status201Created);
+
+        }
+
+        [Authorize(Roles = "Users")]
+        [HttpPost("RateEvent/{id}")]
+        public IActionResult RateEvent(int id, [FromForm] double rating)
+        {
+            var events = _dbContext.Events.Find(id);
+
+            if (events == null)
+            {
+                return NotFound("No record found with this id");
+            }
+
+            else
+            {
+                var prevCount = events.RatingCount;
+                var prevRating = events.Rating;
+                var newRating = (prevCount * prevRating + rating) / (prevCount + 1);
+                events.Rating = newRating;
+                events.RatingCount++;
+                _dbContext.SaveChanges();
+                return Ok("Record updated successfully");
+
+            }
+
+
+
+        }
+
+        [Authorize(Roles = "Users")]
+        [HttpGet("CheckFavoriteEvents")]
+        public IActionResult CheckFavoriteEvents()
+        {
+            var userId = GetUserId();
+            var favorites = from favorite in _dbContext.Favourites
+                            join movie in _dbContext.Events on favorite.EventId equals movie.Id
+                            join user in _dbContext.Users on favorite.UserId equals user.Id
+                            where (favorite.UserId == userId)
+                            select new
+                            {
+                                EventName = movie.Name,
+                                ArtistName = movie.Artist,
+                                City = movie.City
+                            };
+
+            return Ok(favorites);
         }
     }
 }

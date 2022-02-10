@@ -22,16 +22,21 @@ namespace BookMyShowClone.Models
         [Required]
         public string Language { get; set; }
 
+        [Required(ErrorMessage = "Duration field Cannot be null")]
         public string Duration { get; set; }
         public DateTime PlayingDate { get; set; }
         public DateTime PlayingTime { get; set; }
+
+        [Required(ErrorMessage = "TicketPrice Field Cannot be null")]
         public double TicketPrice { get; set; }
+
+        [Required(ErrorMessage = "City Field Cannot be null")]
         public string City { get; set; }
 
         public double Rating { get; set; } = 0;
         public int RatingCount { get; set; } = 0;
 
-        [Required]
+        [Required(ErrorMessage = "UnReservedSeats Field Cannot be null")]
         public int UnReservedSeats { get; set; }
 
         public int ReservedSeats { get; set; } = 0;
