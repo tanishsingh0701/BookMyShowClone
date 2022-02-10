@@ -10,7 +10,7 @@ namespace BookMyShowClone.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Name Field Cannot be null")]
+        //[Required(ErrorMessage = "Name Field Cannot be null")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Email Field Cannot be null")]
@@ -20,7 +20,7 @@ namespace BookMyShowClone.Models
         [Required(ErrorMessage = "Password Field Cannot be null")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Role Field Cannot be null")]
+        //[Required(ErrorMessage = "Role Field Cannot be null")]
         public string Role { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
         public ICollection<Favourite> Favourites { get; set; }

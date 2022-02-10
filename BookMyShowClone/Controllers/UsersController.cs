@@ -31,7 +31,7 @@ namespace BookMyShowClone.Controllers
             _auth = new AuthService(configuration);
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public IActionResult Register([FromBody] User user)
         {
             var userWithSameEmail = _dbContext.Users.Where(u => u.Email == user.Email).SingleOrDefault();
@@ -60,7 +60,7 @@ namespace BookMyShowClone.Controllers
         private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
 
 
-        [HttpPost]
+        [HttpPost("login")]
         public IActionResult Login([FromBody] User user)
         {
             var userEmail = _dbContext.Users.FirstOrDefault(u => u.Email == user.Email);
@@ -117,6 +117,7 @@ namespace BookMyShowClone.Controllers
             return StatusCode(StatusCodes.Status201Created);
 
         }
+
 
         [Authorize(Roles = "Users")]
         [HttpPost("RateEvent/{id}")]

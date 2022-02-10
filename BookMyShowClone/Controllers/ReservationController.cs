@@ -192,5 +192,25 @@ namespace BookMyShowClone.Controllers
             return reservations.Count();
         }
 
+        [HttpDelete("delete/{id}")]
+        [Authorize(Roles = "Users")]
+        public IActionResult Delete(int id)
+        {
+            var reservations = _dbContext.Reservations.Find(id);
+
+            if (reservations == null || (reservations.UserId!=GetUserId()))
+            {
+                return NotFound("No record found with this id");
+            }
+
+            else
+            {
+                _dbContext.Reservations.Remove(reservations);
+                _dbContext.SaveChanges();
+                return Ok("Record deleted successfully");
+            }
+
+        }
+
     }
 }
