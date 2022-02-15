@@ -28,7 +28,7 @@ namespace BookMyShowClone.Controllers
 
         [HttpPost]
         [Authorize(Roles="Admin")]
-        public IActionResult Post([FromForm] Event eventObj)
+        public IActionResult Post([FromBody] Event eventObj)
         {
             var guid = Guid.NewGuid();
 
@@ -40,7 +40,25 @@ namespace BookMyShowClone.Controllers
                 eventObj.Image.CopyTo(fileStream);
             }
 
-            eventObj.ImageUrl = filePath.Remove(0, 7);
+            var eventsObj = new Event
+            {
+                Name = eventObj.Name,
+                Description = eventObj.Description,
+                Artist= eventObj.Artist,
+                Language=  eventObj.Language,
+                Duration= eventObj.Duration,
+                Rating= eventObj.Rating,
+                ImageUrl= eventObj.ImageUrl,
+                
+                TicketPrice= eventObj.TicketPrice,
+                Genre= eventObj.Genre,
+                TrailorUrl= eventObj.TrailorUrl,
+                City= eventObj.City,
+                UnReservedSeats = eventObj.UnReservedSeats
+
+            };
+
+            //eventObj.ImageUrl = filePath.Remove(0, 7);
             _dbContext.Events.Add(eventObj);
             _dbContext.SaveChanges();
             return Ok();
@@ -50,7 +68,7 @@ namespace BookMyShowClone.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles ="Admin")]
-        public IActionResult Put(int id,[FromForm] Event eventObj) 
+        public IActionResult Put(int id,[FromBody] Event eventObj) 
         {
             var events = _dbContext.Events.Find(id);
 
@@ -83,6 +101,8 @@ namespace BookMyShowClone.Controllers
                 events.Duration = eventObj.Duration;
                 events.Description = eventObj.Description;
                 events.Artist = eventObj.Artist;
+                events.ImageUrl = eventObj.ImageUrl;
+                events.UnReservedSeats = eventObj.UnReservedSeats;
 
                 _dbContext.SaveChanges();
                 return Ok("Record updated successfully");
@@ -131,6 +151,73 @@ namespace BookMyShowClone.Controllers
                              ImageUrl = movie.ImageUrl
                          };
             return Ok(movies);
+        }
+
+        
+        [Authorize]
+        [HttpGet("getAllEvents")]
+        
+        public IActionResult AllMovies()
+        {
+            
+            var events_obj = from events in _dbContext.Events
+                         select new
+                         {
+                             id = events.Id,
+                             name = events.Name,
+                             duration = events.Duration,
+                             description=events.Description,
+                             language = events.Language,
+                             rating = events.Rating,
+                             genre = events.Genre,
+                             image_url = events.ImageUrl,
+                             unReservedSeats=events.UnReservedSeats,
+                             artist=events.Artist,
+                             ticket_price=events.TicketPrice,
+                             city = events.City
+
+                         };
+
+            return Ok(events_obj);
+            //return _dbContext.Movies;
+            // here ok method will return movie and status both
+
+            
+
+        }
+
+
+        //[Authorize]
+        [HttpGet("getEvents/{id}")]
+
+        public IActionResult AllMovies(int id)
+        {
+
+            var events_obj = from events in _dbContext.Events
+                             where (events.Id == id)
+                             select new
+                             {
+                                 id = events.Id,
+                                 name = events.Name,
+                                 duration = events.Duration,
+                                 description = events.Description,
+                                 language = events.Language,
+                                 rating = events.Rating,
+                                 genre = events.Genre,
+                                 image_url = events.ImageUrl,
+                                 unReservedSeats = events.UnReservedSeats,
+                                 artist = events.Artist,
+                                 ticket_price = events.TicketPrice,
+                                 city = events.City
+
+                             };
+
+            return Ok(events_obj);
+            //return _dbContext.Movies;
+            // here ok method will return movie and status both
+
+
+
         }
 
     }

@@ -69,6 +69,14 @@ namespace BookMyShowClone
                 });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddCors(option => 
+            {
+                option.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,6 +94,7 @@ namespace BookMyShowClone
 
 
             app.UseRouting();
+            app.UseCors();
             app.UseAuthentication();
 
             app.UseAuthorization();

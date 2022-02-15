@@ -53,7 +53,18 @@ namespace BookMyShowClone.Controllers
                 };
                 _dbContext.Users.Add(userObj);
                 _dbContext.SaveChanges();
-                return StatusCode(StatusCodes.Status201Created);
+
+                
+                    return new ObjectResult(new
+                    {
+                        name = userObj.Name,
+                        email = userObj.Email,
+                        password = user.Password,
+                        role = userObj.Role
+
+                    });
+                
+                //return StatusCode(StatusCodes.Status201Created);
             }
         }
 
@@ -66,7 +77,8 @@ namespace BookMyShowClone.Controllers
             var userEmail = _dbContext.Users.FirstOrDefault(u => u.Email == user.Email);
             if (userEmail == null)
             {
-                return NotFound();
+                //return NotFound();
+                return BadRequest("Email and Password is incorrect");
             }
 
             if (!SecurePasswordHasherHelper.Verify(user.Password, userEmail.Password))
@@ -95,6 +107,7 @@ namespace BookMyShowClone.Controllers
                 creation_Time = token.ValidFrom,
                 expiration_Time = token.ValidTo,
                 user_id = userEmail.Id,
+                user_type=userEmail.Role
                 
             });
 
