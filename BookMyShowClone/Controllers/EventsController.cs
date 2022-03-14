@@ -136,19 +136,53 @@ namespace BookMyShowClone.Controllers
         }
 
         [Authorize]
-        [HttpGet("{info}")]
+        [HttpGet("search/{info}")]
         public IActionResult FindMovies(string info)
         {
+            if (info == "1")
+            {
+                var movies2 = from movie in _dbContext.Events
+                                    
+                                    select new
+                                    {
+                                        id = movie.Id,
+                                        name = movie.Name,
+                                        duration = movie.Duration,
+                                        description = movie.Description,
+                                        language = movie.Language,
+                                        rating = movie.Rating,
+                                        genre = movie.Genre,
+                                        image_url = movie.ImageUrl,
+                                        unReservedSeats = movie.UnReservedSeats,
+                                        artist = movie.Artist,
+                                        ticket_price = movie.TicketPrice,
+                                        city = movie.City,
+                                        reservedSeats=movie.ReservedSeats
+                                    };
+                return Ok(movies2);
+
+            }
             var movies = from movie in _dbContext.Events
-                         where movie.City.StartsWith(info) ||
-                         movie.Name.StartsWith(info) ||
-                         movie.Artist.StartsWith(info) ||
-                         movie.Genre.StartsWith(info)
+                         where
+                         //movie.City.StartsWith(info) ||
+                         movie.Name.StartsWith(info)
+                         // ||movie.Artist.StartsWith(info) ||
+                         //movie.Genre.StartsWith(info)
                          select new
                          {
-                             Id = movie.Id,
-                             Name = movie.Name,
-                             ImageUrl = movie.ImageUrl
+                             id = movie.Id,
+                             name = movie.Name,
+                             duration = movie.Duration,
+                             description = movie.Description,
+                             language = movie.Language,
+                             rating = movie.Rating,
+                             genre = movie.Genre,
+                             image_url = movie.ImageUrl,
+                             unReservedSeats = movie.UnReservedSeats,
+                             artist = movie.Artist,
+                             ticket_price = movie.TicketPrice,
+                             city = movie.City,
+                             reservedSeats = movie.ReservedSeats
                          };
             return Ok(movies);
         }
@@ -174,7 +208,8 @@ namespace BookMyShowClone.Controllers
                              unReservedSeats=events.UnReservedSeats,
                              artist=events.Artist,
                              ticket_price=events.TicketPrice,
-                             city = events.City
+                             city = events.City,
+                             reservedSeats = events.ReservedSeats
 
                          };
 
@@ -208,7 +243,8 @@ namespace BookMyShowClone.Controllers
                                  unReservedSeats = events.UnReservedSeats,
                                  artist = events.Artist,
                                  ticket_price = events.TicketPrice,
-                                 city = events.City
+                                 city = events.City,
+                                 reservedSeats = events.ReservedSeats
 
                              };
 

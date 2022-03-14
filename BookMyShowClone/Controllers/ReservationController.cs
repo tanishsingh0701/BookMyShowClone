@@ -59,7 +59,7 @@ namespace BookMyShowClone.Controllers
         }
 
         [Authorize(Roles = "Users")]
-        [HttpGet]
+        [HttpGet()]
         public IActionResult GetReservationsUser()
         {
             var reservations = from reservation in _dbContext.Reservations
@@ -72,7 +72,9 @@ namespace BookMyShowClone.Controllers
                                    Id = reservation.Id,
                                    ReservationTime = reservation.ReservationTime,
                                    CustomerName = customer.Name,
-                                   EventName = movie.Name
+                                   EventName = movie.Name,
+                                   Quantity=reservation.Qty
+                                   
                                };
 
             return Ok(reservations);
